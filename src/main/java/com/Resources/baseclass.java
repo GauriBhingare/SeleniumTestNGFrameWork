@@ -1,19 +1,28 @@
 package com.Resources;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
+import java.util.Date;
 
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 public class baseclass {
 
-	public WebDriver driver; // this driver containts value
+	public static WebDriver driver; // this driver containts value
 
 	public Properties prop;
 	public static String email = generateRandomEmailID();
@@ -45,12 +54,40 @@ public class baseclass {
 
 		}
 	}
+	
+	//To take the screenshot and store in one folder-
+	  public static String screenShot(WebDriver driver, String filename) {
+	   String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+	                                                   //  202312120744
+	  
+	   TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+	   File source = takesScreenshot.getScreenshotAs(OutputType.FILE);
+	   String destination = System.getProperty("user.dir") + "\\ScreenShot\\" + filename + "_" + dateName + ".png";
+	   File finalDestination = new File(destination);
+	   try {
+	    FileUtils.copyFile(source, finalDestination);
+	   } catch (Exception e) {
+	    e.getMessage();
+	   }
+	   return destination;
+	  }
+	 
 
 	public static String generateRandomEmailID()
 
 	{
 		return "abc" + System.currentTimeMillis() + "@gmail.com";
 
+	}
+	
+	@BeforeSuite
+	public void ExtentReport() {
+	  ExtentManager.setup();
+	}
+
+	@AfterSuite
+	public void endReport() {
+	  ExtentManager.endReport();
 	}
 
 	@BeforeMethod()

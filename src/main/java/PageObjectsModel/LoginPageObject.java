@@ -8,6 +8,7 @@ public class LoginPageObject {
 
 	public WebDriver driver;
 
+	//private By logIn = By.xpath("//id[@href='/login']"); login failed result
 	private By logIn = By.xpath("//a[@href='/login']");
 	private By Email = By.xpath("//input[@id='Email']");
 	private By Password = By.xpath("//input[@id='Password']");
